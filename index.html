@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Department Ticket</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card p-4 shadow-sm">
+            <h2 class="text-center mb-4">IT Department Ticket</h2>
+            <form id="userForm">
+                <div class="mb-3">
+                    <label class="form-label">First Name</label>
+                    <input type="text" id="firstName" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Middle Name</label>
+                    <input type="text" id="middleName" class="form-control">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" id="lastName" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Age</label>
+                    <input type="number" id="age" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Gender</label>
+                    <div class="form-check">
+                        <input type="radio" name="gender" value="Male" class="form-check-input" required>
+                        <label class="form-check-label">Male</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" name="gender" value="Female" class="form-check-input" required>
+                        <label class="form-check-label">Female</label>
+                    </div>
+                    <div class="form-check">
+                        <input type="radio" name="gender" value="Other" class="form-check-input" required>
+                        <label class="form-check-label">Other</label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Phone Number</label>
+                    <input type="text" id="phone" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Email</label>
+                    <input type="email" id="email" class="form-control" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">City & State</label>
+                    <input type="text" id="city" class="form-control" required>
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-app.js";
+        import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/11.2.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDP4312i3LprsAoeAMkOxXJQ8J_hMT_Sj4",
+            authDomain: "hhif-d0596.firebaseapp.com",
+            projectId: "hhif-d0596",
+            storageBucket: "hhif-d0596.firebasestorage.app",
+            messagingSenderId: "763544001236",
+            appId: "1:763544001236:web:057f0292712556b6d6b941"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const firstName = document.getElementById('firstName').value;
+            const middleName = document.getElementById('middleName').value;
+            const lastName = document.getElementById('lastName').value;
+            const age = document.getElementById('age').value;
+            const gender = document.querySelector('input[name="gender"]:checked').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const city = document.getElementById('city').value;
+
+            // Push form data to Firebase
+            const ticketRef = ref(database, 'tickets');
+            push(ticketRef, {
+                firstName: firstName,
+                middleName: middleName,
+                lastName: lastName,
+                age: age,
+                gender: gender,
+                phone: phone,
+                email: email,
+                city: city
+            }).then(() => {
+                alert('Ticket Submitted Successfully');
+                // Optionally clear form
+                document.getElementById('userForm').reset();
+            }).catch((error) => {
+                console.error('Error submitting ticket: ', error);
+                alert('Error submitting ticket');
+            });
+        });
+    </script>
+</body>
+</html>
